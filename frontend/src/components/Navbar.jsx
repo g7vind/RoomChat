@@ -1,8 +1,6 @@
 import React from 'react';
 import { useAuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { logoutRoute } from '../utils/ApiRoutes';
 import { toast } from 'react-toastify';
 
 export default function Navbar() {

@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.7.7",
     "daisyui": "^4.12.13",
     "newroomchat": "file:..",
     "prop-types": "^15.8.1",

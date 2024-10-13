@@ -4,8 +4,7 @@ import styled from "styled-components";
 import Logo from "../assets/connectly.svg";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { registerRoute } from '../utils/ApiRoutes';
+
 
 const Register = () => {
     const [formData, setFormData] = useState({

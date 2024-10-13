@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Logo from "../assets/connectly.svg";
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {useAuthContext} from "../context/AuthContext";
-import { loginRoute } from '../utils/ApiRoutes';
 const Login = () => {
     const [formData, setFormData] = useState({
         username: "",
