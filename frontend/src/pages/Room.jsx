@@ -111,7 +111,7 @@ const Room = () => {
                             />
                             <button className="btn btn-primary" 
                             onClick={sendMessage}
-                            onKeyDown={(e) => e.key === 'Enter' && sendMessage}
+                            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                             >
                                 Send
                             </button>
@@ -126,7 +126,7 @@ const Room = () => {
                             placeholder="Enter room name"
                             value={room}
                             onChange={(e) => setRoom(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && connectToRoom}
+                            onKeyDown={(e) => e.key === 'Enter' && connectToRoom(e)}
                         />
                         <button type="submit">Connect</button>
                     </form>
