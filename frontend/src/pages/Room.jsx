@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { io } from "socket.io-client";
-import { host } from "../utils/ApiRoutes";
 import { useAuthContext } from '../context/AuthContext';
 let socket;
 
