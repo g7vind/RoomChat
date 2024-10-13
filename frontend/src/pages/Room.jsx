@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { io } from "socket.io-client";
@@ -14,11 +14,23 @@ const Room = () => {
     const [members, setMembers] = useState([]);
     const { authUser } = useAuthContext();
 
+    // Ref for auto-scrolling
+    const messagesEndRef = useRef(null);
+
+    // Function to format time
+    const formatTime = (date) => {
+        return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true, // Use hour12: false if you want a 24-hour format
+        });
+    };
+
     useEffect(() => {
         socket = io(host);
         socket.on('receive_message', (data) => {
             data.type = 'incoming';
-            data.timestamp = new Date().toLocaleTimeString();
+            data.timestamp = formatTime(new Date()); // Format the incoming message timestamp
             setMessages((prevMessages) => [...prevMessages, data]);
         });
         socket.on('room_members', (members) => {
@@ -28,6 +40,15 @@ const Room = () => {
             socket.disconnect();
         };
     }, []);
+
+    useEffect(() => {
+        // Scroll to the bottom whenever messages update
+        scrollToBottom();
+    }, [messages]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     const connectToRoom = (e) => {
         e.preventDefault();
@@ -51,7 +72,7 @@ const Room = () => {
                 content: message,
                 sender: authUser.username,
                 type: 'outgoing',
-                timestamp: new Date().toLocaleTimeString(), // Format the time
+                timestamp: formatTime(new Date()), // Format the outgoing message timestamp
             };
             socket.emit('send_message', msgData);
             setMessages((prevMessages) => [...prevMessages, msgData]);
@@ -99,6 +120,8 @@ const Room = () => {
                                         </div>
                                     </div>
                                 ))}
+                                {/* This is the reference point for scrolling */}
+                                <div ref={messagesEndRef} />
                             </div>
                         </ChatMessages>
                         <ChatInputContainer className="border-t p-4 flex">
@@ -111,7 +134,6 @@ const Room = () => {
                             />
                             <button className="btn btn-primary" 
                             onClick={sendMessage}
-                            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                             >
                                 Send
                             </button>
@@ -126,7 +148,6 @@ const Room = () => {
                             placeholder="Enter room name"
                             value={room}
                             onChange={(e) => setRoom(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && connectToRoom(e)}
                         />
                         <button type="submit">Connect</button>
                     </form>
