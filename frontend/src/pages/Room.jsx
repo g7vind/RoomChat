@@ -89,8 +89,8 @@ const Room = () => {
                         <ChatMessages className="flex-1 overflow-y-scroll p-4">
                             <div className="space-y-4">
                                 {messages.map((msg, index) => (
-                                    <div key={index} className={`chat ${msg.type === 'outgoing' ? 'chat-end' : 'chat-start'}`}>
-                                        <div className={`chat-bubble ${msg.type === 'outgoing' ? 'chat-bubble-secondary' : 'chat-bubble-primary'}`}>
+                                    <div key={index} className={`chat ${msg.type === 'outgoing' ? 'chat-start' : 'chat-end'}`}>
+                                        <div className={`chat-bubble ${msg.type === 'outgoing' ? 'chat-bubble-primary' : 'chat-bubble-secondary'}`}>
                                             <p>{msg.content}</p>
                                             <div className="text-xs text-gray-500 mt-2">
                                                 {msg.sender} • {msg.timestamp}
@@ -108,7 +108,10 @@ const Room = () => {
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                             />
-                            <button className="btn btn-primary" onClick={sendMessage}>
+                            <button className="btn btn-primary" 
+                            onClick={sendMessage}
+                            onKeyPress={(e) => e.key === 'Enter' && sendMessage}
+                            >
                                 Send
                             </button>
                         </ChatInputContainer>
@@ -122,6 +125,7 @@ const Room = () => {
                             placeholder="Enter room name"
                             value={room}
                             onChange={(e) => setRoom(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && connectToRoom}
                         />
                         <button type="submit">Connect</button>
                     </form>
