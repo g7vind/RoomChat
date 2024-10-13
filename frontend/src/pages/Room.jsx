@@ -81,6 +81,7 @@ const Room = () => {
         socket.emit('leave_room', room);
         setLoggedIn(false);
         setRoom('');
+        setMessages([]);
         toast.info(`Left the room ${room}`);
     };
 
