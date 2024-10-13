@@ -19,7 +19,7 @@ app.use(cors({
 app.use('/api/auth', authRouters);
 
 
-app.use(express.static(path.join(___dirname, '../frontend/dist')));
+app.use(express.static(path.join(___dirname, '/frontend/dist')));
 app.get('*', (req,res) => {
         res.sendFile(path.resolve(___dirname, "frontend", "dist", "index.html"));
 });
