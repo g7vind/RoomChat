@@ -90,7 +90,7 @@ const Room = () => {
             {isLoggedIn ? (
                 <div className="flex h-screen pt-16"> {/* Added pt-16 to ensure no overlap with navbar */}
                     <Sidebar>
-                        <h2 className="text-lg font-bold mb-4">Users</h2>
+                        <h2 className="text-lg font-bold mb-4">Users in room {room}</h2>
                         <UserList className="space-y-2">
                             {members.map((member, index) => (
                                 <li
