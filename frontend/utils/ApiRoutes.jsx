@@ -1,0 +1,1 @@
+export const host = "https://connectlychat.onrender.com"
