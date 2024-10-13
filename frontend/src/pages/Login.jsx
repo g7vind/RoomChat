@@ -5,6 +5,7 @@ import Logo from "../assets/connectly.svg";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import {useAuthContext} from "../context/AuthContext";
+
 const Login = () => {
     const [formData, setFormData] = useState({
         username: "",
@@ -43,6 +44,10 @@ const Login = () => {
                     toast.success("User login successfully");
                     localStorage.setItem("user", JSON.stringify(data.user));
                     setAuthUser(data.user);
+                    setFormData({
+                        username: "",
+                        password: ""
+                    });
                     navigate("/");
                 }
                 else{

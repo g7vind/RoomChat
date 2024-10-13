@@ -18,6 +18,7 @@ const Room = () => {
         socket = io(host);
         socket.on('receive_message', (data) => {
             data.type = 'incoming';
+            data.timestamp = new Date().toLocaleTimeString();
             setMessages((prevMessages) => [...prevMessages, data]);
         });
         socket.on('room_members', (members) => {
@@ -110,7 +111,7 @@ const Room = () => {
                             />
                             <button className="btn btn-primary" 
                             onClick={sendMessage}
-                            onKeyPress={(e) => e.key === 'Enter' && sendMessage}
+                            onKeyDown={(e) => e.key === 'Enter' && sendMessage}
                             >
                                 Send
                             </button>
@@ -125,7 +126,7 @@ const Room = () => {
                             placeholder="Enter room name"
                             value={room}
                             onChange={(e) => setRoom(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && connectToRoom}
+                            onKeyDown={(e) => e.key === 'Enter' && connectToRoom}
                         />
                         <button type="submit">Connect</button>
                     </form>
