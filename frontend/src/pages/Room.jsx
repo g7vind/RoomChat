@@ -6,6 +6,7 @@ import { host } from "../utils/ApiRoutes";
 import { useAuthContext } from '../context/AuthContext';
 let socket;
 
+
 const Room = () => {
     const [room, setRoom] = useState('');
     const [isLoggedIn, setLoggedIn] = useState(false);
@@ -14,15 +15,12 @@ const Room = () => {
     const [members, setMembers] = useState([]);
     const { authUser } = useAuthContext();
 
-    // Ref for auto-scrolling
     const messagesEndRef = useRef(null);
-
-    // Function to format time
     const formatTime = (date) => {
         return date.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: true, // Use hour12: false if you want a 24-hour format
+            hour12: true, 
         });
     };
 
@@ -30,7 +28,7 @@ const Room = () => {
         socket = io(host);
         socket.on('receive_message', (data) => {
             data.type = 'incoming';
-            data.timestamp = formatTime(new Date()); // Format the incoming message timestamp
+            data.timestamp = formatTime(new Date()); 
             setMessages((prevMessages) => [...prevMessages, data]);
         });
         socket.on('room_members', (members) => {
@@ -42,14 +40,13 @@ const Room = () => {
     }, []);
 
     useEffect(() => {
-        // Scroll to the bottom whenever messages update
         scrollToBottom();
     }, [messages]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     };
-
     const connectToRoom = (e) => {
         e.preventDefault();
         const roomData = {
