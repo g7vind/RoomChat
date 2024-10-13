@@ -46,7 +46,8 @@ const Login = () => {
                     navigate("/");
                 }
                 else{
-                    toast.error("Something went wrong");
+                    const error = await response.json();
+                    toast.error(error.message);
                 }
             }
         }

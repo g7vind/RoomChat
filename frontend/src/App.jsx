@@ -11,7 +11,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 function App() {
   const {authUser} = useAuthContext();
   return (
-    <div className='overflow-hidden'>
+    <div >
     <Navbar />
       <Routes>
         <Route path="/" element={authUser ? <Room /> : <Navigate to="/login" />} />

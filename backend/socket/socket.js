@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 const { joinRoom, leaveRoom, sendMessage,disconnectFromSocket } = require('../controllers/socket.controller');
-const { disconnect } = require('process');
 const io = new Server(server, {
     cors: {
         origin: process.env.CLIENT_URL,

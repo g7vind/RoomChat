@@ -12,7 +12,8 @@ const Room = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [members, setMembers] = useState([]);
-    const { authUser } = useAuthContext(); 
+    const { authUser } = useAuthContext();
+
     useEffect(() => {
         socket = io(host);
         socket.on('receive_message', (data) => {
@@ -29,10 +30,10 @@ const Room = () => {
 
     const connectToRoom = (e) => {
         e.preventDefault();
-        const roomData={
-            room:room,
-            username:authUser.username
-        }
+        const roomData = {
+            room: room,
+            username: authUser.username,
+        };
         if (socket) {
             socket.emit('join_room', roomData);
             setLoggedIn(true);
@@ -49,7 +50,7 @@ const Room = () => {
                 content: message,
                 sender: authUser.username,
                 type: 'outgoing',
-                timestamp: new Date(),
+                timestamp: new Date().toLocaleTimeString(), // Format the time
             };
             socket.emit('send_message', msgData);
             setMessages((prevMessages) => [...prevMessages, msgData]);
@@ -67,10 +68,10 @@ const Room = () => {
     return (
         <>
             {isLoggedIn ? (
-                <div className="flex h-screen">
+                <div className="flex h-screen pt-16"> {/* Added pt-16 to ensure no overlap with navbar */}
                     <Sidebar>
                         <h2 className="text-lg font-bold mb-4">Users</h2>
-                        <ul className="space-y-2">
+                        <UserList className="space-y-2">
                             {members.map((member, index) => (
                                 <li
                                     key={index}
@@ -79,18 +80,21 @@ const Room = () => {
                                     {member.username}
                                 </li>
                             ))}
-                        </ul>
-                        <button onClick={leaveRoom} className="mt-4 p-2 bg-red-500 text-white rounded">
+                        </UserList>
+                        <LeaveButton onClick={leaveRoom} className="p-2 bg-red-500 text-white rounded">
                             Leave Room
-                        </button>
+                        </LeaveButton>
                     </Sidebar>
                     <ChatSection>
                         <ChatMessages className="flex-1 overflow-y-scroll p-4">
                             <div className="space-y-4">
                                 {messages.map((msg, index) => (
-                                    <div key={index} className={`chat ${msg.type === 'outgoing' ? 'chat-start' : 'chat-end'}`}>
+                                    <div key={index} className={`chat ${msg.type === 'outgoing' ? 'chat-end' : 'chat-start'}`}>
                                         <div className={`chat-bubble ${msg.type === 'outgoing' ? 'chat-bubble-secondary' : 'chat-bubble-primary'}`}>
-                                            {msg.content}
+                                            <p>{msg.content}</p>
+                                            <div className="text-xs text-gray-500 mt-2">
+                                                {msg.sender} • {msg.timestamp}
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
@@ -127,46 +131,34 @@ const Room = () => {
     );
 };
 
+// Styled Components
 const Sidebar = styled.div`
     width: 25%;
     background-color: white;
     padding: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes the leave button to the bottom */
+`;
 
-    h2 {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
+const UserList = styled.ul`
+    flex-grow: 1; /* Makes user list take up available space */
+    overflow-y: auto; /* Makes user list scrollable */
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+`;
 
-    ul {
-        margin-top: 1rem;
-        list-style: none;
-        padding: 0;
-    }
-
-    li {
-        padding: 0.5rem;
-        margin-bottom: 0.5rem;
-        background-color: #f1f1f1;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        transition: background-color 0.2s;
-
-        &:hover {
-            background-color: #ddd;
-        }
-    }
-
-    button {
-        margin-top: 1rem;
-        width: 100%;
-        padding: 0.5rem;
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 0.25rem;
-        cursor: pointer;
-    }
+const LeaveButton = styled.button`
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin-top: 1rem;
 `;
 
 const ChatSection = styled.div`
@@ -182,6 +174,7 @@ const ChatMessages = styled.div`
     flex: 1;
     overflow-y: auto;
     padding: 1rem;
+    max-height: calc(100vh - 10rem); /* Set a maximum height for the messages section */
 `;
 
 const ChatInputContainer = styled.div`
@@ -189,22 +182,6 @@ const ChatInputContainer = styled.div`
     border-top: 1px solid #ddd;
     padding: 1rem;
     gap: 0.5rem;
-
-    input {
-        flex: 1;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 0.25rem;
-    }
-
-    button {
-        padding: 0.5rem 1rem;
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 0.25rem;
-        cursor: pointer;
-    }
 `;
 
 const FormContainer = styled.div`
