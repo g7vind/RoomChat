@@ -1,1 +1,1 @@
-export const host = "https://connectlychat.onrender.com"
+export const host = "https://roomchat-g7de.onrender.com"
